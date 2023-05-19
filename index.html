@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Oregon Waters</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel="shortcut icon" href="./img/fish.svg">
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+    <link rel='stylesheet' href="./css/style.css">
+    <!-- import mapbox files and tiles -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+
+</head>
+
+<body>
+
+    <div id='map'></div>
+    <div class="media-box" id="media-box">
+        <div class="chart" id="line">
+            <canvas id="line-canvas"></canvas>
+            <div id="usgs-link"></div>
+        </div>
+    </div> <!-- SPAN is probably why the chart is whack... -->
+    <span class="menu">
+        <!-- button for opening/closing flow graph -->
+        <button id='toggleGraph' role="button" onclick="toggle('media-box', 'toggleGraph')">
+            <svg class="icon"></svg>
+        </button>
+
+        <!-- button for toggling info panel -->
+        <!-- still needs to be hooked up; other functions need to be pointed higher in DOM tree to expose .media-box-->
+        <button id='toggleInfo' role="button" onclick="toggle('media-box', 'toggleInfo')"> 
+            info
+        </button>
+    </span>
+    <!-- chart.js source code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+    <script src="./js/index.js"></script>
+</body>
+
+</html>
