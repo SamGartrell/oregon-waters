@@ -1,0 +1,16 @@
+<svg width="256px" height="256px" viewBox="0 0 100.00 100.00" xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--gis"
+    preserveAspectRatio="xMidYMid meet" fill="#badeea" stroke="#badeea" stroke-width="0.001">
+    <defs>
+        <filter id="gaussian-blur">
+            <feGaussianBlur stdDeviation="10" />
+        </filter>
+    </defs>
+    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+    <g id="SVGRepo_iconCarrier">
+        <path
+            d="M50 37.45c-6.89 0-12.55 5.66-12.55 12.549c0 6.89 5.66 12.55 12.55 12.55c6.655 0 12.112-5.294 12.48-11.862a3.5 3.5 0 0 0 .07-.688a3.5 3.5 0 0 0-.07-.691C62.11 42.74 56.653 37.45 50 37.45zm0 7c3.107 0 5.55 2.442 5.55 5.549s-2.443 5.55-5.55 5.55c-3.107 0-5.55-2.443-5.55-5.55c0-3.107 2.443-5.549 5.55-5.549z"
+            fill="#B0F4F0"></path>
+    </g>
+</svg>
