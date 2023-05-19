@@ -2,7 +2,17 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtZ2FydHJlbGwiLCJhIjoiY2w3OWt3MW00MDNjbDN2c
 var map = new mapboxgl.Map({
     container: 'map', // pointing to the above "map" div
     style: 'mapbox://styles/samgartrell/cl7tnbdlk000215qdvkret4rv',
-    center: [-123.0868, 44.0521],
+    maxBounds: [
+        [
+            -126.255,
+            40.4435
+            
+        ],
+        [
+            -114.933,
+            47.444
+        ]
+    ],
     zoom: 8
 });
 
@@ -13,15 +23,15 @@ map.addControl(
 
 map.addControl(
     new mapboxgl.GeolocateControl({
-    positionOptions: {
-        enableHighAccuracy: true
-    },
-    // When active the map will receive updates to the device's location as it changes.
-    trackUserLocation: true,
-    // Draw an arrow next to the location dot to indicate which direction the device is heading.
-    showUserHeading: true
+        positionOptions: {
+            enableHighAccuracy: true
+        },
+        // When active the map will receive updates to the device's location as it changes.
+        trackUserLocation: true,
+        // Draw an arrow next to the location dot to indicate which direction the device is heading.
+        showUserHeading: true
     })
-    );
+);
 
 // Data for Map points:
 // actual endpoint (started working...?)
@@ -146,7 +156,7 @@ const callback = (mutationList, observer) => {
                 ReferenceError
             } finally {
                 if (structuredData[siteId] != undefined) {
-                    // handle screen dimension stuff
+                    // handle mobile/pc screen dimension stuff
                     if (window.innerHeight <= window.innerWidth) {
                         chartEl.parentElement.parentElement.style.maxWidth = '50vw'
                     } else {
@@ -154,7 +164,7 @@ const callback = (mutationList, observer) => {
                     }
 
                     chrt = renderChart(chartEl, structuredData[siteId], autoShow = true);
-                    renderLink(linkEl, siteId, text='view USGS graph')
+                    renderLink(linkEl, siteId, text = 'view USGS graph')
 
                 } else {
                     console.log('7 day history unavailable for this location')
@@ -274,7 +284,7 @@ function renderChart(e, siteData, autoShow = false, btn = document.getElementByI
 
         // update button display
         btn.style.display = 'block'
-        btn.style.width = '5vh'
+        btn.style.width = '30px'
 
         // change symbology of icon
         img.style.rotate = '45deg'
@@ -454,7 +464,7 @@ function toggle(boxId, buttonId) {
 
 };
 
-function renderLink (e, id, text='view source') {
+function renderLink(e, id, text = 'view source') {
     // renders a link to the USGS viewer for the given gauge
     linkTag = `<a id="link" href="https://waterdata.usgs.gov/monitoring-location/${id}/#parameterCode=00060&period=P7D" target="_blank" rel="noopener noreferrer">${text}</a>`
     e.innerHTML = linkTag

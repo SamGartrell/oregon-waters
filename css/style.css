@@ -22,8 +22,9 @@ button {
     outline: white;
     background-color: rgba(30, 33, 40, 1);
     border-color: rgba(255, 255, 255, 0.4);
-    border-radius: 2.5vh;
-    height: 5vh;
+    border-radius: 100px;
+    border-style: solid;
+    border-width: 1px;
     display: block;
 }
 
@@ -43,17 +44,21 @@ button {
 }
 
 #toggleGraph {
-    width: 20vw;
+    width: 30px;
+    height: 30px;
+    margin: 10px;
     display: none;
     /* this changes when a chart is rendered and a button is necessary */
-    transition: width .3s;
+    /* transition: width .3s; */
 }
 
 #toggleInfo {
-    width: 20vw;
-    /* visibility: hidden; this changes when a chart is rendered and a button is necessary */
+    width: 30px;
+    height: 30px;
+    margin: 10px;
     display: none;
-    transition: width .3s;
+    /* this changes when a chart is rendered and a button is necessary */
+    /* transition: width .3s; */
 }
 
 #usgs-link {
@@ -62,7 +67,7 @@ button {
     display: flex;
 }
 
-.menu {
+/* .menu {
     background-color: rgba(252, 15, 15, 0);
     display: flex;
     z-index: 9999;
@@ -70,9 +75,33 @@ button {
     justify-content: center;
     align-items: center;
     height: 6%;
-    /* set a height or remove this line to fit content */
     position: absolute;
     bottom: 0;
+} */
+
+.menu {
+    height: 100%;
+    /* 100% Full-height */
+
+    position: fixed;
+    /* Stay in place */
+
+    z-index: 1;
+    /* Stay on top */
+
+    top: 0;
+    /* Stay at the top */
+
+    right: 0;
+    background-color: rgba(137, 43, 226, 0);
+    /* Black*/
+
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+
+    padding-top: 136px;
+    /* leave space for mapbox-sourced controls */
+
 }
 
 .media-box {
@@ -108,8 +137,8 @@ button {
 }
 
 .icon {
-    height: 3vh;
-    width: 3vh;
+    height: 17px;
+    width: 17px;
     background-image: url(../img/plus.svg);
     background-repeat: no-repeat;
     display: block;
