@@ -67,43 +67,6 @@ button {
     display: flex;
 }
 
-/* .menu {
-    background-color: rgba(252, 15, 15, 0);
-    display: flex;
-    z-index: 9999;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    height: 6%;
-    position: absolute;
-    bottom: 0;
-} */
-
-.menu {
-    height: 100%;
-    /* 100% Full-height */
-
-    position: fixed;
-    /* Stay in place */
-
-    z-index: 1;
-    /* Stay on top */
-
-    top: 0;
-    /* Stay at the top */
-
-    right: 0;
-    background-color: rgba(137, 43, 226, 0);
-    /* Black*/
-
-    overflow-x: hidden;
-    /* Disable horizontal scroll */
-
-    padding-top: 136px;
-    /* leave space for mapbox-sourced controls */
-
-}
-
 .media-box {
     background-color: rgba(137, 43, 226, 0);
     opacity: 0;
