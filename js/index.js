@@ -2,11 +2,12 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtZ2FydHJlbGwiLCJhIjoiY2w3OWt3MW00MDNjbDN2c
 var map = new mapboxgl.Map({
     container: 'map', // pointing to the above "map" div
     style: 'mapbox://styles/samgartrell/cl7tnbdlk000215qdvkret4rv',
+    center: [-122.3460007, 44.87574640],
     maxBounds: [
         [
             -126.255,
             40.4435
-            
+
         ],
         [
             -114.933,
@@ -33,12 +34,21 @@ map.addControl(
     })
 );
 
-// Data for Map points:
-// actual endpoint (started working...?)
+// manually add a custom graph toggle to the right control group div
+const rightCtrlGroup = document.getElementsByClassName('mapboxgl-ctrl-top-right')[0];
+const graphCtrl = document.createElement('div');
+graphCtrl.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+
+graphCtrl.innerHTML = `
+    <button id='toggleGraph' role="button" onclick="toggle('media-box', 'toggleGraph')">
+    <svg class="icon"></svg>
+    </button>
+`;
+rightCtrlGroup.appendChild(graphCtrl);
+
+// Data for gauge points:
 var endpoint = `https://waterservices.usgs.gov/nwis/iv/?format=json&indent=on&stateCd=or&${formatDateStamp(0)}&parameterCd=00060&siteStatus=active`
 console.log(endpoint)
-// // local file endpoint, copied from the rest API response in browser (works)
-// var local = './data/0.json'
 
 // send api request
 fetch(endpoint)
@@ -90,17 +100,6 @@ fetch(endpoint)
                         }
                     }
 
-
-                    // create a popup
-                    // TODO: put info like this next to the graph and think of a cool css way to have the cards balanced on mobile etc
-                    // let popup = new mapboxgl.Popup(
-                    //     { closeOnClick: true, focusAfterOpen: false }
-                    // ).setHTML(`<h2>${g.title}</h2>
-                    //             <p>${g.data.desc}: ${g.data.value}</p>
-                    //             <br>
-                    //             <a href=https://waterdata.usgs.gov/monitoring-location/${g.id}/#parameterCode=00060&period=P7D>updated at ${g.data.time}</a>`
-                    // );
-
                     // create a DOM element for each marker (this is how icons are styled)
                     const el = document.createElement('div');
                     el.className = 'marker';
@@ -143,7 +142,7 @@ const linkEl = document.getElementById('usgs-link')
 const config = { attributes: true, childList: false, subtree: false };
 
 // Callback function to execute when mutations are observed
-const callback = (mutationList, observer) => {
+const callback = (mutationList) => {
     for (const mutation of mutationList) {
         // only fire if the mutation concerns "siteid"
         if (mutation.type === "attributes" && mutation.attributeName === "siteid") {
@@ -181,6 +180,16 @@ const observer = new MutationObserver(callback);
 
 // Start observing the target node for configured mutations
 observer.observe(chartEl, config);
+
+// close chart if map is clicked and a chart is showing. 
+map.on('click', function (e) {
+    console.log(e)
+    chartBox = document.getElementById('line')
+    console.log(chartBox)
+    if (chartBox.style.opacity == 1) {
+        toggle('media-box', 'toggleGraph')
+    }
+});
 
 // observer.disconnect();
 
