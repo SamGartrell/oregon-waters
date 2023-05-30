@@ -23,19 +23,7 @@
             <canvas id="line-canvas"></canvas>
             <div id="usgs-link"></div>
         </div>
-    </div> <!-- SPAN is probably why the chart is whack... -->
-    <span class="menu">
-        <!-- button for opening/closing flow graph -->
-        <button id='toggleGraph' role="button" onclick="toggle('media-box', 'toggleGraph')">
-            <svg class="icon"></svg>
-        </button>
-
-        <!-- button for toggling info panel -->
-        <!-- still needs to be hooked up; other functions need to be pointed higher in DOM tree to expose .media-box-->
-        <button id='toggleInfo' role="button" onclick="toggle('media-box', 'toggleInfo')"> 
-            info
-        </button>
-    </span>
+    </div>
     <!-- chart.js source code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     </script>
