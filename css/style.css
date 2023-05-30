@@ -44,9 +44,8 @@ button {
 }
 
 #toggleGraph {
-    width: 30px;
-    height: 30px;
-    margin: 10px;
+    width: 29px;
+    height: 29px;
     display: none;
     /* this changes when a chart is rendered and a button is necessary */
     /* transition: width .3s; */
