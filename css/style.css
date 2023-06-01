@@ -5,7 +5,7 @@ body {
 
 p {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: #FFF;
+    color: rgba(255, 255, 255, 0.4);
     margin: auto;
 }
 
@@ -26,6 +26,11 @@ button {
     border-style: solid;
     border-width: 1px;
     display: block;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Space Grotesk', 'Trebuchet MS', 'Lucida Sans Unicode', sans-serif;
+    color:#1CD6D9;
 }
 
 .x {
