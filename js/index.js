@@ -34,17 +34,32 @@ map.addControl(
     })
 );
 
-// manually add a custom graph toggle to the right control group div
+// manually add custom buttons to the right control group div
 const rightCtrlGroup = document.getElementsByClassName('mapboxgl-ctrl-top-right')[0];
+
+// info toggle
+const infoCtrl = document.createElement('div');
+infoCtrl.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+
+infoCtrl.innerHTML = `
+    <button id='toggleInfo' role="button" onclick="toggleInfo('info-box', 'toggleInfo')">
+    <svg class="icon" id="info"></svg>
+    </button>
+`;
+rightCtrlGroup.appendChild(infoCtrl);
+
+// graph toggle
 const graphCtrl = document.createElement('div');
 graphCtrl.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
 
 graphCtrl.innerHTML = `
-    <button id='toggleGraph' role="button" onclick="toggle('media-box', 'toggleGraph')">
-    <svg class="icon"></svg>
+    <button id='toggleGraph' role="button" onclick="toggleGraph('chart-box', 'toggleGraph')">
+    <svg class="icon" id="graph"></svg>
     </button>
 `;
 rightCtrlGroup.appendChild(graphCtrl);
+
+
 
 // Data for gauge points:
 var endpoint = `https://waterservices.usgs.gov/nwis/iv/?format=json&indent=on&stateCd=or&${formatDateStamp(0)}&parameterCd=00060&siteStatus=active`
@@ -167,7 +182,7 @@ const callback = (mutationList) => {
 
                 } else {
                     console.log('7 day history unavailable for this location')
-                    //chart current values or something
+                    // ...chart current values or something?
                 }
             }
 
@@ -182,16 +197,12 @@ const observer = new MutationObserver(callback);
 observer.observe(chartEl, config);
 
 // close chart if map is clicked and a chart is showing. 
-map.on('click', function (e) {
-    console.log(e)
-    chartBox = document.getElementById('line')
-    console.log(chartBox)
-    if (chartBox.style.opacity == 1) {
-        toggle('media-box', 'toggleGraph')
-    }
+map.on('click', function () {
+    // TODO: if id variable passed to chart has not changed,
+    // close the graph (ideally, the clicked icon will change color)
+    // else,
+    // do nothing and the new graph will render.
 });
-
-// observer.disconnect();
 
 // FUNCS:
 function formatDateStamp(daysAgo, hrWindow = 1) {
@@ -427,20 +438,21 @@ function formatTitleCase(str) {
     }
 }
 
-function toggle(boxId, buttonId) {
-    // toggles visibility style prop of an element identified by boxId
+function toggleGraph(boxId, buttonId) {
+    // toggles the graph's visibility, and updates the button styling
 
-    el = document.getElementById(boxId)
-    bt = document.getElementById(buttonId)
+    el = document.getElementById(boxId) //access chart container
+    bt = document.getElementById(buttonId) //access button element
     img = bt.children[0] //assumes btton has an image
 
-    // handle screen dimension stuff
+    // handle screen dimension stuff, so that the chart doesn't swallow the whole page
     if (window.innerHeight <= window.innerWidth) {
+        // if the screen is square or landscape, don't let the chart get wider than half the screen
         chartEl.parentElement.parentElement.style.maxWidth = '50vw'
     } else {
+        // if the screen is mobile, center the chart at the bottom of the screen
         chartEl.parentElement.parentElement.style.maxWidth = null
     }
-
 
     // if the graph is currently hidden...
     if (el.style.opacity != '1') {
@@ -451,24 +463,63 @@ function toggle(boxId, buttonId) {
         // update its opacity
         el.style.opacity = '1'
 
-        // change symbology of icon
+        // change symbology of its icon
         img.style.rotate = '45deg'
         img.style['background-image'] = 'url(./img/plus.svg)'
 
 
         // otherwise...
     } else if (el.style.opacity != '0') {
-        el.style.opacity = '0'
+        el.style.opacity = '0' //hide it
         bt.style.display = 'block'
-        img.style.rotate = '0deg'
-        img.style['background-image'] = 'url(./img/graph.svg)'
+        img.style.rotate = '0deg' // rotate the button
+        img.style['background-image'] = 'url(./img/graph.svg)' //change its image to a graph
 
         //ensure the opacity fade ends before the visibility changes 
         setTimeout(
             () => { el.style.display = 'none'; }, 300
         )
     } else {
-        console.log('WHAT')
+        console.log('unhandled logic in toggleGraph()')
+    }
+
+};
+
+function toggleInfo(boxId, buttonId) {
+    // toggles the info panel's visibility, and updates the button styling
+    // TODO: this function can be united with toggleGraph, if more params are added
+
+    el = document.getElementById(boxId) //access info container
+    bt = document.getElementById(buttonId) //access button element
+    img = bt.children[0] //assumes btton has one image
+
+    // if the info panel is currently hidden...
+    if (el.style.opacity != '1') {
+
+        // reveal it
+        el.style.display = 'flex'
+
+        // update its opacity
+        el.style.opacity = '1'
+
+        // change symbology of its icon
+        img.style.rotate = '45deg'
+        img.style['background-image'] = 'url(./img/plus.svg)'
+
+
+        // otherwise...
+    } else if (el.style.opacity != '0') {
+        el.style.opacity = '0' //hide it
+        bt.style.display = 'block'
+        img.style.rotate = '0deg' // rotate the button
+        img.style['background-image'] = 'url(./img/info.svg)' //change its image to a graph
+
+        //ensure the opacity fade ends before the visibility changes 
+        setTimeout(
+            () => { el.style.display = 'none'; }, 300
+        )
+    } else {
+        console.log('unhandled logic in toggleInfo()')
     }
 
 };

@@ -52,10 +52,8 @@ button {
 }
 
 #toggleInfo {
-    width: 30px;
-    height: 30px;
-    margin: 10px;
-    display: none;
+    width: 29px;
+    height: 29px;
     /* this changes when a chart is rendered and a button is necessary */
     /* transition: width .3s; */
 }
@@ -82,6 +80,22 @@ button {
     padding: .5%;
 }
 
+.info {
+    background-color: rgba(30, 33, 40, 1);
+    outline: 4px solid rgba(255, 255, 255, 0.4);
+    outline-width: 1px;
+    z-index: 10000;
+    border-radius: 2rem;
+    margin: 20px;
+    padding: 20px;
+    height: 100%;
+    flex: 1 1 auto;
+    /* this will make the charts grow and shrink as necessary */
+    min-width: calc(100% / 4 - 2%);
+    /* adjust the fraction based on the number of charts you want to display */
+    max-width: calc(100% / 1 - 2%);
+}
+
 .chart {
     background-color: rgba(30, 33, 40, 1);
     outline: 4px solid rgba(255, 255, 255, 0.4);
@@ -98,15 +112,23 @@ button {
     max-width: calc(100% / 1 - 2%);
 }
 
+/* styling for the svgs inside buttons */
 .icon {
     height: 17px;
     width: 17px;
-    background-image: url(../img/plus.svg);
     background-repeat: no-repeat;
     display: block;
     rotate: 0deg;
     transition: rotate .3s;
     margin: auto;
+}
+
+#graph {
+    background-image: url(../img/plus.svg);
+}
+
+#info {
+    background-image: url(../img/info.svg);
 }
 
 /* mapbox overrides */
