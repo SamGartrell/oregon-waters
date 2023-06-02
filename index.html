@@ -12,16 +12,102 @@
     <!-- import mapbox files and tiles -->
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Foldit:wght@300&family=Pacifico&family=Space+Grotesk:wght@300;500;700&display=swap"
+        rel="stylesheet">
 
 </head>
 
 <body>
 
     <div id='map'></div>
-    <div class="media-box" id="media-box">
+    <div class="media-box" id="chart-box">
         <div class="chart" id="line">
             <canvas id="line-canvas"></canvas>
             <div id="usgs-link"></div>
+        </div>
+    </div>
+    <div class="media-box" id="info-box">
+        <div class="info">
+            <h1>Oregon Waters</h1>
+            <br>
+            <h3>How to Use this Tool</h3>
+            <ul>
+                <li>
+                    <p>
+                        Each <img src="img/semi.svg" alt="blue circle icon" height="16px" width="16px" /> represents a
+                        USGS stream gauge. Click it to view water levels over the past
+                        week.</p>
+                <li>
+                    <p>Use the <img src="img/plus.svg" alt="blue plus icon" height="16px" width="16px" /> and <img
+                            src="img/minus.svg" alt="blue minus icon" height="16px" width="16px" /> to zoom in
+                        and out, and the <img src="img/north.svg" alt="blue chevron icon" height="16px" width="16px" />
+                        to reset the map bearing to North</p>
+                </li>
+                <li>
+                    <p>Use the <img src="img/crosshair.svg" alt="crosshair icon" height="16px" width="16px" /> to center
+                        the map on your current location</p>
+                </li>
+                <li>
+                    <p>Zooming in on the map will reveal satellite imagery</p>
+                </li>
+            </ul>
+            <br>
+            <h3>Land Acknowledgement</h3>
+            <p>&emsp; The lands and waters you're enjoying have been stewarded by peoples including the Umpqua, Wasco, Walla
+                Walla, Piute, Cayuse, Umatilla, Siletz, Klamath, Modoc, Kalapuya, and Molalla for 11 thousand years. For
+                most of that time, there were a lot more fish. However, the genocide and land theft resulting from
+                colonial expansion have degraded the environment and repressed the indigenous knowledge woven into the
+                landscape.
+                <br>
+                &emsp; Recognize that these tribes are still here, resilient, and actively working to preserve their cultural
+                heritage. Initiatives like <a href="https://critfc.org/" target="_blank" rel="noopener noreferrer">CRITFC</a> and <a href="https://klamathtribes.org/ambodat/" target="_blank" rel="noopener noreferrer">Ambodat</a> are leading efforts to reclaim lands, waters, and first
+                foods (such as salmon, steelhead, lamprey, C'waam, and Koptu). By safeguarding these vital resources,
+                the tribes are not only ensuring their own sustenance but also protecting the land's ecological balance
+                and cultural significance.
+                <br>
+                &emsp; When you're out there, treat the land with respect and honor the legacy of those who have known and
+                cared for these places for thousands of years. Consider the ongoing efforts of these tribes and the
+                importance of supporting their initiatives towards land reclamation, cultural preservation, and
+                environmental stewardship.
+            </p>
+            <br>
+            <h3>Data Credits</h3>
+            <ul>
+                <li>
+                    <p>
+                        Water levels data comes from USGS' <a href="https://waterservices.usgs.gov/rest/IV-Service.html"
+                            target="_blank" rel="noopener noreferrer">Instantaneous Values Web Service</a>
+                    </p>
+                <li>
+                    <p>Basemap data comes from <a href="https://www.mapbox.com/" target="_blank"
+                            rel="noopener noreferrer">mapbox</a>, <a href="https://www.openstreetmap.org/about"
+                            target="_blank" rel="noopener noreferrer">OpenStreetMap</a>, and <a
+                            href="https://www.maxar.com/" target="_blank" rel="noopener noreferrer">Maxar</a></p>
+                </li>
+                <li>
+                    <p>All icons come from <a href="https://www.svgrepo.com/" target="_blank"
+                            rel="noopener noreferrer">svgrepo</a></p>
+                </li>
+                <li>
+                    <p>This application is hosted on <a href="https://github.com/" target="_blank"
+                            rel="noopener noreferrer">github</a></p>
+                </li>
+            </ul>
+            <br>
+            <div class="contact">
+                <a class="contact-item" href="https://www.instagram.com/wall.urchin/" target="_blank"
+                    rel="noopener noreferrer"><img src="img/instagram.svg" alt="instagram icon" height="50px"
+                        width="50px" /></a>
+                <a class="contact-item" href="https://www.github.com/SamGartrell/" target="_blank"
+                    rel="noopener noreferrer"><img src="img/github.svg" alt="github icon" height="50px"
+                        width="50px" /></a>
+                <a class="contact-item" href="mailto:gartrell.sam.s@gmail.com"><img src="img/email.svg" alt="email icon"
+                        height="50px" width="50px" /></a>
+            </div>
+
         </div>
     </div>
     <!-- chart.js source code -->
