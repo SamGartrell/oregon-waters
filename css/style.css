@@ -1,14 +1,17 @@
+/* universal */
 body {
     margin: 0;
     padding: 0;
 }
 
+/* grey text */
 p {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: rgba(255, 255, 255, 0.4);
     margin: auto;
 }
 
+/* blue links */
 a,
 a:focus,
 a:hover {
@@ -17,9 +20,12 @@ a:hover {
     text-decoration: none;
 }
 
+/* get list items to be colored with same grey as text */
 li {
     color:rgba(255, 255, 255, 0.4);
 }
+
+/* part of button styling here, part in mapbox override section */
 button {
     outline: white;
     background-color: rgba(30, 33, 40, 1);
@@ -30,11 +36,13 @@ button {
     display: block;
 }
 
+/* turquise headings with Space Grotesk font */
 h1, h2, h3, h4, h5 {
     font-family: 'Space Grotesk', 'Trebuchet MS', 'Lucida Sans Unicode', sans-serif;
     color:#1CD6D9;
 }
 
+/* special formatting for "x" on buttons (currently not used) */
 .x {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: #FFF;
@@ -42,6 +50,7 @@ h1, h2, h3, h4, h5 {
     font-size: 20pt;
 }
 
+/* map canvas styling */
 #map {
     position: absolute;
     top: 0;
@@ -50,21 +59,20 @@ h1, h2, h3, h4, h5 {
     z-index: 1;
 }
 
+/* initial state of graph/info toggles  */
 #toggleGraph {
     width: 29px;
     height: 29px;
     display: none;
     /* this changes when a chart is rendered and a button is necessary */
-    /* transition: width .3s; */
 }
-
 #toggleInfo {
     width: 29px;
     height: 29px;
     /* this changes when a chart is rendered and a button is necessary */
-    /* transition: width .3s; */
 }
 
+/* additional justification/alignment/size adjustment for link in graph window */
 #usgs-link {
     justify-content: center;
     align-items: center;
@@ -72,6 +80,7 @@ h1, h2, h3, h4, h5 {
     font-size: smaller;
 }
 
+/* this controls the outer container for both graph and info modals */
 .media-box {
     background-color: rgba(137, 43, 226, 0);
     opacity: 0;
@@ -89,6 +98,7 @@ h1, h2, h3, h4, h5 {
     pointer-events: none;
 }
 
+/* inner info container */
 .info {
     background-color: rgba(30, 33, 40, 1);
     outline: 4px solid rgba(255, 255, 255, 0.4);
@@ -104,6 +114,7 @@ h1, h2, h3, h4, h5 {
     overflow-y: scroll;
 }
 
+/* inner chart container */
 .chart {
     background-color: rgba(30, 33, 40, 1);
     outline: 4px solid rgba(255, 255, 255, 0.4);
@@ -121,7 +132,7 @@ h1, h2, h3, h4, h5 {
     pointer-events:all;
 }
 
-/* styling for the svgs inside buttons */
+/* styling for the svgs inside buttons (see mapbox override section) */
 .icon {
     height: 17px;
     width: 17px;
@@ -132,56 +143,55 @@ h1, h2, h3, h4, h5 {
     margin: auto;
 }
 
+/* using the "plus" icon (rotated 45deg in index.js) to create an X for when buttons are in open state */
 #graph {
     background-image: url(../img/plus.svg);
 }
-
 #info {
     background-image: url(../img/info.svg);
 }
 
+/* space out socials div evenly */
 .contact {
     
     display: flex;
     justify-content: space-evenly;
 }
 
-/* mapbox overrides */
+/* MAPBOX OVERRIDES */
 .mapboxgl-ctrl-icon {
     display: none !important;
 }
 
+/* change icon */
 .mapboxgl-ctrl-zoom-in {
     background-image: url(../img/plus.svg);
     background-repeat: no-repeat;
     background-position: center;
 }
-
 .mapboxgl-ctrl-zoom-out {
     background-image: url(../img/minus.svg);
     background-repeat: no-repeat;
     background-position: center;
 }
-
 .mapboxgl-ctrl-compass {
     background-image: url(../img/north.svg);
     background-repeat: no-repeat;
     background-position: center;
 }
-
 .mapboxgl-ctrl-geolocate {
     background-image: url(../img/crosshair.svg);
     background-repeat: no-repeat;
     background-position: center;
 }
 
+/* change colors to dark grey to emphasize icon */
 .mapboxgl-ctrl-group {
     outline: solid rgba(255, 255, 255, .4) !important;
     outline-width: 1px !important;
     border-radius: 2.5vh !important;
     background: rgba(30, 33, 40, 1) !important;
 }
-
 .mapboxgl-ctrl-group button+button {
     border-top: 0px solid #ddd !important;
 }
