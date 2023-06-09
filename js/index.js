@@ -1,4 +1,6 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtZ2FydHJlbGwiLCJhIjoiY2w3OWt3MW00MDNjbDN2cGRpc20ya3JnbyJ9.6t2ISNlyP1BvBmkSH2Ks_Q';
+
+// initialize map
 var map = new mapboxgl.Map({
     container: 'map', // pointing to the above "map" div
     style: 'mapbox://styles/samgartrell/cl7tnbdlk000215qdvkret4rv',
@@ -61,12 +63,14 @@ rightCtrlGroup.appendChild(graphCtrl);
 
 
 
-// Data for gauge points:
+// THIS SECTION HANDLES CURRENT DATA RETRIEVAL
+// set endpoint
 var endpoint = `https://waterservices.usgs.gov/nwis/iv/?format=json&indent=on&stateCd=or&${formatDateStamp(0)}&parameterCd=00060&siteStatus=active`
-console.log(endpoint)
+// console.log(endpoint)
 
 // send api request
 fetch(endpoint)
+    // parse as JSON 
     .then(response => response.json())
     .then(data => {
 
@@ -97,6 +101,7 @@ fetch(endpoint)
                             }
                         };
                     } catch (error) {
+                        // sometimes the values array gets finnicky--just look 1 layer further into the array
                         if (error instanceof TypeError) {
                             g = {
                                 'lat': gauge.sourceInfo.geoLocation.geogLocation.latitude,
@@ -111,6 +116,7 @@ fetch(endpoint)
                                 }
                             };
                         } else {
+                            // non-TypeErrors have never happened but just to be sure...
                             console.log(error)
                         }
                     }
@@ -127,14 +133,15 @@ fetch(endpoint)
                     let marker = new mapboxgl.Marker(el)
                         .setLngLat([g.lon, g.lat])
                         .addTo(map)
-                    // .setPopup(popup)
 
                     let element = marker.getElement()
                     element.setAttribute('siteid', `${g.id}`)
                     element.setAttribute(
-                        'onClick', "passID(this)"
+                        // this enables markers to send their id to the chart to render the graph
+                        'onClick', "passID(this)" 
                     );
                 } catch (error) {
+                    // this hasn't happened yet
                     console.log(`error:`, gauge, error)
                 }
             }
@@ -145,18 +152,19 @@ fetch(endpoint)
 
 // retrieve data for last 7 days and restructure to be ingestible by renderChart()
 // an array of promises is also returned, in case the requests are still executing
-// eventually, put this in a timeout loop that runs every hour or something
+// TODO: put this in a timeout loop that runs every hour or something, so the map is fresh when left open overnight or something
 const structuredData = retrieveData()
-console.log(structuredData)
+// console.log(structuredData)
 
 // CHART
+// set up a mutation observer to listen for changes to the ID in chartEl (proxy for click event on a given gauge)
 const chartEl = document.getElementById('line-canvas')
 const linkEl = document.getElementById('usgs-link')
 
-// Options for the observer (which mutations to observe)
+// options for the observer (which mutations to observe)
 const config = { attributes: true, childList: false, subtree: false };
 
-// Callback function to execute when mutations are observed
+// callback function to execute when mutations are observed
 const callback = (mutationList) => {
     for (const mutation of mutationList) {
         // only fire if the mutation concerns "siteid"
@@ -167,7 +175,7 @@ const callback = (mutationList) => {
                     chrt.destroy(); // without this, the charts persist and jump back and forth on hover
                 }
             } catch {
-                ReferenceError
+                ReferenceError // in case there's no chart yet and the above if fired anyway
             } finally {
                 if (structuredData[siteId] != undefined) {
                     // handle mobile/pc screen dimension stuff
@@ -177,12 +185,16 @@ const callback = (mutationList) => {
                         chartEl.parentElement.parentElement.style.maxWidth = null
                     }
 
+                    // see renderChart docstring... structuredData is a json indexable by siteId
                     chrt = renderChart(chartEl, structuredData[siteId], autoShow = true);
+                    
+                    // see renderLink docstring
                     renderLink(linkEl, siteId, text = 'view USGS graph')
 
                 } else {
+                    // this hasn't been happening, but leaving it in case
                     console.log('7 day history unavailable for this location')
-                    // ...chart current values or something?
+                    // TODO: chart current values or something?
                 }
             }
 
@@ -190,22 +202,26 @@ const callback = (mutationList) => {
     }
 };
 
-// Create an observer instance linked to the callback function
+// initialize and run the observer specified above
 const observer = new MutationObserver(callback);
-
-// Start observing the target node for configured mutations
 observer.observe(chartEl, config);
 
-// close chart if map is clicked and a chart is showing. 
-map.on('click', function () {
-    // TODO: if id variable passed to chart has not changed,
+// TODO: enable click-away from the chart with something like the following:
+// map.on('click', function () {
+    // if id variable passed to chart has not changed,
     // close the graph (ideally, the clicked icon will change color)
     // else,
     // do nothing and the new graph will render.
-});
+// });
 
 // FUNCS:
+// TODO: move these to a separate file and figure out how to import as module
 function formatDateStamp(daysAgo, hrWindow = 1) {
+    /**
+     * creates a duration stamp in ISO-8601 format corresponding to a specified number of days before (the present - 1 hour)
+     * @param {int} daysAgo the number of days to go into the past
+     * @param {int} hrWindow the number of hours the stamp should span (default 1) 
+     */
     // get/freeze now 
     // (make it an hour ago just so data is guaranteed to have been transmitted to USGS db in last hr, if daysAgo=0)
     const now = new Date(Date.now() - 4 * 60 * 60 * 1000);
@@ -220,8 +236,11 @@ function formatDateStamp(daysAgo, hrWindow = 1) {
     return `startDT=${start.toISOString()}&endDT=${end.toISOString()}`;
 }
 
-// color markers based on stream depth
 function getMarkerColor(attributes) {
+/**
+     * // color markers based on stream depth (not used, since depth isn't currently retrieved)
+     * @param {object} attributes attributes corresponding to a gauge marker
+     */
     if (attributes.depth < 2) {
         return 'green';
     } else if (attributes.depth < 4) {
@@ -231,45 +250,64 @@ function getMarkerColor(attributes) {
     }
 };
 
-// pass ID to chart element
+
 function passID(e, chartEl = document.getElementById('line-canvas')) {
+    /**
+     * passes a gauge's id to the chart element
+     * @param e the element possessing this method
+     * @param chartEl the chart element 
+     */
     id = e.getAttribute('siteid')
     chartEl.setAttribute('siteid', id)
-    console.log(id)
+    // console.log(id)
 };
 
 function retrieveData() {
     /*
-    Function to retrieve flow data for all stream gauges for the last 7 days, 
-    then restructure the result into an object to be parsed by the graph function 
-    Courtesy of ChatGPT.
+    Retrieves flow data for all stream gauges for the last 7 days, 
+    then restructures the result into an object to be parsed by the graph function 
+    (promise logic courtesty of ChatGPT)
     */
 
-    const days = ['today', 'yesterday', '2daysago', '3daysago', '4daysago', '5daysago', '6daysago']; // this code is whack
+    // TODO: reiintegrate this array with labels in the chart function?
+    const days = [
+        "last week",
+        "6 days ago",
+        "5 days ago",
+        "4 days ago",
+        "3 days ago",
+        "yesterday",
+        "today",
+    ];
     const results = {};
 
-    // Create an array of promises
+    // create an array of promises
     const promises = days.map((day, i) => {
-        const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&indent=on&stateCd=or&${formatDateStamp(i)}&parameterCd=00060&siteStatus=active`; // eventually, manipulate this code to make actual requests. starting with 0 days ago (not 1, as here)
+        // promises are fulfilled when requests are returned for each day of the week
+        const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&indent=on&stateCd=or&${formatDateStamp(i)}&parameterCd=00060&siteStatus=active`;
+        // parse into JSON
         return fetch(url).then(response => response.json());
     });
 
-    // Wait for all promises to resolve before continuing
+    // wait for all promises to resolve before continuing
     Promise.all(promises).then(data => {
         data.forEach(json => {
             const timeSeries = json.value.timeSeries;
             for (let j = 0; j < timeSeries.length; j++) {
+                // restructure the results into a single JSON
                 const siteCode = timeSeries[j].sourceInfo.siteCode[0].value;
                 const siteName = timeSeries[j].sourceInfo.siteName;
 
+                // handle formatting differences in data
                 if (!results[siteCode]) {
                     results[siteCode] = {
                         name: siteName,
                         readings: {}
                     };
                 }
+
                 try {
-                    // changed to "let" to enable error recovery
+                    // using "let" to enable error recovery
                     let readings = timeSeries[j].values[0].value.map(v => parseFloat(v.value));
                     let index = data.indexOf(json) + 1;
                     results[siteCode].readings[index] = readings;
@@ -288,12 +326,20 @@ function retrieveData() {
         });
 
     }).catch(error => {
+        // this hasn't happened yet
         console.error(error);
     });
     return results
 }
 
 function renderChart(e, siteData, autoShow = false, btn = document.getElementById('toggleGraph')) {
+    /**
+     * renders the chart element, working in tandem with the event listener above
+     * @param e the element where the chart lives
+     * @param siteData the json of 7-day readings belonging to a given site
+     * @param autoShow determines if the graph should be revealed whenever rendered
+     * @param btn the button that triggers the chart
+     */
     if (autoShow) {
         // automatically show the graph when a gauge is clicked
         e.parentElement.parentElement.style.display = 'block'
@@ -311,6 +357,7 @@ function renderChart(e, siteData, autoShow = false, btn = document.getElementByI
         img.style['background-image'] = 'url(./img/plus.svg)'
     };
 
+    // an object to organize graph styling handled outside style.css
     const colors = {
         'neutral': {
             'light': 'rgba(255, 255, 255, 0.1)',
@@ -326,6 +373,7 @@ function renderChart(e, siteData, autoShow = false, btn = document.getElementByI
     // initialize canvas element for chart.js
     var ctx = e.getContext("2d");
 
+    // TODO: relevant to integrate with the requests section? Maybe incorporate into siteData?
     const labels = [
         "last week",
         "6 days ago",
@@ -336,22 +384,24 @@ function renderChart(e, siteData, autoShow = false, btn = document.getElementByI
         "today",
     ];
 
+    // initialize and populate a list to hold 7 days of flow rates
     let flowRates = [];
-
     for (let i = 1; i <= 7; i++) {
-        vals = siteData["readings"][i];
+        vals = siteData["readings"][i]; //for each of the 7 arrays of readings,
         mean = vals.reduce(
             (acc, val) => acc + val, 0
-        ) / vals.length;
-        flowRates.push(
+        ) / vals.length; // get their mean value
+        flowRates.push( // and add it to flowRates
             Math.round(mean, 0),
         )
 
     }
 
     // reverse flow rates to put the sequence of readings in chronological order
+    // TODO: change direction that flow rates array is added to to eliminate this step
     flowRates = flowRates.reverse()
 
+    // create an object to hold the chart data and style (inherits from colors object)
     let data = {
         labels,
         datasets: [{
@@ -367,6 +417,7 @@ function renderChart(e, siteData, autoShow = false, btn = document.getElementByI
         }]
     };
 
+    // create a separate object to hold additional chart configuration (inherits from colors object)
     let config = {
         type: 'line',
         data: data,
@@ -407,6 +458,7 @@ function renderChart(e, siteData, autoShow = false, btn = document.getElementByI
         }
     };
 
+    // BOOM
     let myChart = new Chart(ctx, config)
 
     return myChart
@@ -414,10 +466,16 @@ function renderChart(e, siteData, autoShow = false, btn = document.getElementByI
 
 
 function formatTitleCase(str) {
-    // this function makes titles more pretty by modifying the case
+    /**
+     * makes titles more pretty by modifying the case, except prepositions
+     * @param {string} str the string to reformat
+     */
+
+    // words to keep lower
     const lowerCaseWords = ["near", "at", "in", "above", "below", "by"];
     const words = str.toLowerCase().split(" ");
 
+    // Do The Magic Stuff
     for (let i = 0; i < words.length; i++) {
         const word = words[i];
         if (!lowerCaseWords.includes(word)) {
@@ -427,19 +485,25 @@ function formatTitleCase(str) {
         }
     }
 
+    // put them back together
     const result = words.join(" ");
 
+    // handling for ugly OR suffix
     if (result.toLowerCase().endsWith(", or")) {
         return result.slice(0, -4);
     } else if (result.toLowerCase().endsWith(",or")) {
-
+        return result.slice(0, -3);
     } else {
         return result
     }
 }
 
 function toggleGraph(boxId, buttonId) {
-    // toggles the graph's visibility, and updates the button styling
+    /**
+     * toggle the graph visibility and update the button's icon
+     * @param {str} boxId the id of the element whose visibility needs toggling
+     * @param {str} buttonId the id of the button whose style needs updating 
+     */
 
     el = document.getElementById(boxId) //access chart container
     bt = document.getElementById(buttonId) //access button element
@@ -480,14 +544,20 @@ function toggleGraph(boxId, buttonId) {
             () => { el.style.display = 'none'; }, 300
         )
     } else {
+        // hasn't happened
         console.log('unhandled logic in toggleGraph()')
     }
 
 };
 
 function toggleInfo(boxId, buttonId) {
-    // toggles the info panel's visibility, and updates the button styling
+    /**
+     * toggle the info panel's visibility and update the button's icon
+     * @param {str} boxId the id of the element whose visibility needs toggling
+     * @param {str} buttonId the id of the button whose style needs updating 
+     */
     // TODO: this function can be united with toggleGraph, if more params are added
+    
 
     el = document.getElementById(boxId) //access info container
     bt = document.getElementById(buttonId) //access button element
@@ -525,7 +595,12 @@ function toggleInfo(boxId, buttonId) {
 };
 
 function renderLink(e, id, text = 'view source') {
-    // renders a link to the USGS viewer for the given gauge
+    /**
+     * renders a link to the USGS viewer for the given gauge
+     * @param e the element designated to contain the link 
+     * @param id the stream gauge ID 
+     * @param text the text to display in the hyperlink
+     */
     linkTag = `<a id="link" href="https://waterdata.usgs.gov/monitoring-location/${id}/#parameterCode=00060&period=P7D" target="_blank" rel="noopener noreferrer">${text}</a>`
     e.innerHTML = linkTag
 };

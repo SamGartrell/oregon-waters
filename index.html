@@ -6,12 +6,13 @@
     <title>Oregon Waters</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <link rel="shortcut icon" href="./img/fish.svg">
-    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
     <link rel='stylesheet' href="./css/style.css">
-    <!-- import mapbox files and tiles -->
+
+    <!-- import mapbox files, tiles, and styles -->
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+
+    <!-- import fonts from google-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -22,13 +23,18 @@
 
 <body>
 
+    <!-- map -->
     <div id='map'></div>
+
+    <!-- graph -->
     <div class="media-box" id="chart-box">
         <div class="chart" id="line">
             <canvas id="line-canvas"></canvas>
             <div id="usgs-link"></div>
         </div>
     </div>
+
+    <!-- info panel -->
     <div class="media-box" id="info-box">
         <div class="info">
             <h1>Oregon Waters</h1>
@@ -48,7 +54,7 @@
                 </li>
                 <li>
                     <p>Use the <img src="img/crosshair.svg" alt="crosshair icon" height="16px" width="16px" /> to center
-                        the map on your current location</p>
+                        the map on your current location; Click it again to turn off geolocation.</p>
                 </li>
                 <li>
                     <p>Zooming in on the map will reveal satellite imagery</p>
@@ -69,7 +75,7 @@
                 and cultural significance.
                 <br>
                 &emsp; When you're out there, treat the land with respect and honor the legacy of those who have known and
-                cared for these places for thousands of years. Consider the ongoing efforts of these tribes and the
+                cared for these places for thousands of years. Consider  the ongoing efforts of these tribes and the
                 importance of supporting their initiatives towards land reclamation, cultural preservation, and
                 environmental stewardship.
             </p>
@@ -97,6 +103,8 @@
                 </li>
             </ul>
             <br>
+
+            <!-- links to socials -->
             <div class="contact">
                 <a class="contact-item" href="https://www.instagram.com/wall.urchin/" target="_blank"
                     rel="noopener noreferrer"><img src="img/instagram.svg" alt="instagram icon" height="50px"
@@ -109,11 +117,13 @@
             </div>
             <br>
             <br>
+
+            <!-- creative commons licensing info -->
             <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
 
         </div>
     </div>
-    <!-- chart.js source code -->
+    <!-- source code for ChartJS and my own work -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     </script>
     <script src="./js/index.js"></script>
